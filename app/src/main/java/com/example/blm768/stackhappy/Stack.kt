@@ -17,7 +17,7 @@ class StackItem(var value: BigDecimal) {
     }
 }
 
-// TODO: return an option type?
+// TODO: return an algebraic type with an error message?
 fun add(a: StackItem, b: StackItem): StackItem? {
     return StackItem(a.value + b.value)
 }
