@@ -9,16 +9,17 @@ class CalculatorActivity : AppCompatActivity(),
         StackViewFragment.OnFragmentInteractionListener,
         KeyboardFragment.OnFragmentInteractionListener {
 
+    // TODO: just handle this completely within onCreate?
+    private var stackView: StackViewFragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calculator)
+
+        stackView = getSupportFragmentManager().findFragmentById(R.id.stackView) as StackViewFragment
     }
 
     override fun onKeyEvent(event: KeyEvent) {
-        // TODO: implement.
-    }
-
-    override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented")
+            stackView?.onKeyEvent(event)
     }
 }

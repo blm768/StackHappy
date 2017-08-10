@@ -1,7 +1,6 @@
 package com.example.blm768.stackhappy.ui
 
 import com.example.blm768.stackhappy.Stack
-import com.example.blm768.stackhappy.StackOperation
 
 /**
  *
@@ -11,7 +10,7 @@ abstract class KeyEvent {
 
     interface Listener {
         fun enterText(text: String)
-        fun doOperation(operation: StackOperation)
+        fun doOperation(operation: (Stack) -> Unit)
     }
 }
 
@@ -20,5 +19,11 @@ class NumberKeyEvent: KeyEvent() {
 
     override fun act(listener: Listener) {
         listener.enterText(digit)
+    }
+}
+
+class OperationEvent(val operation: (Stack) -> Unit) : KeyEvent() {
+    override fun act(listener: Listener) {
+        listener.doOperation(operation)
     }
 }

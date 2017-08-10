@@ -4,10 +4,8 @@
              android:layout_height="match_parent"
              tools:context="com.example.blm768.stackhappy.ui.KeyboardFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <GridLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="3">
 
@@ -64,6 +62,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/digit_3"/>
+
+        <Button
+            android:id="@+id/button_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/digit_0"/>
     </GridLayout>
 
 </FrameLayout>

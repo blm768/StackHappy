@@ -1,16 +1,24 @@
 package com.example.blm768.stackhappy
 
+import java.math.BigDecimal
+
 /**
  *
  */
 class Stack {
-   private var entries: java.util.Stack<StackItem> = java.util.Stack()
+    // TODO: see if there's a native Kotlin collection that we want to consider using.
+    private var entries: java.util.Stack<StackItem> = java.util.Stack()
 }
 
-interface StackItem {
-    fun text(): String
+class StackItem(var value: BigDecimal) {
+
+    fun text(): String {
+        return value.toString()
+    }
 }
 
-abstract class StackOperation {
-    abstract fun operate(stack: Stack)
+// TODO: return an option type?
+fun add(a: StackItem, b: StackItem): StackItem? {
+    return StackItem(a.value + b.value)
 }
+

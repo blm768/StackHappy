@@ -10,13 +10,15 @@ import com.example.blm768.stackhappy.R
 
 
 /**
- * A simple [Fragment] subclass.
+ * A fragment for a calculator keyboard
+ *
  * Use the [KeyboardFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class KeyboardFragment : Fragment() {
 
     // TODO: Rename and change types of parameters
+    // TODO: settle on a naming convention for private instance variables.
     private var mParam1: String? = null
 
     private var mListener: OnFragmentInteractionListener? = null
@@ -82,6 +84,7 @@ class KeyboardFragment : Fragment() {
          * @return A new instance of fragment KeyboardFragment.
          */
         // TODO: Rename and change types and number of parameters
+        // TODO: build keyboard dynamically from an XML or JSON description.
         fun newInstance(param1: String): KeyboardFragment {
             val fragment = KeyboardFragment()
             val args = Bundle()

@@ -11,7 +11,6 @@ import android.widget.EditText
 
 import com.example.blm768.stackhappy.R
 import com.example.blm768.stackhappy.Stack
-import com.example.blm768.stackhappy.StackOperation
 
 /**
  * A simple [Fragment] subclass.
@@ -38,17 +37,20 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_stack_view, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_stack_view, container, false)
+
+        entryLine = view.findViewById(R.id.entryLine) as EditText
+
+        return view
     }
 
     fun onKeyEvent(event: KeyEvent) {
         event.act(this)
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
+    // TODO: rename and implement.
+    fun onSomeEvent() {
         if (mListener != null) {
-            mListener!!.onFragmentInteraction(uri)
         }
     }
 
@@ -67,11 +69,13 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
     }
 
     override fun enterText(text: String) {
-        // TODO: implement.
+        //TODO: support text insertion?
+        entryLine?.append(text)
     }
 
-    override fun doOperation(operation: StackOperation) {
-        // TODO: implement.
+    override fun doOperation(operation: (Stack) -> Unit) {
+        // TODO: implement fully.
+        operation(stack)
     }
 
     /**
@@ -81,8 +85,6 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
      * activity.
      */
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
     }
 
     companion object {

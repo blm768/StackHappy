@@ -5,13 +5,16 @@
               android:orientation="vertical"
               tools:context="com.example.blm768.stackhappy.ui.StackViewFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/stackEntries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
 
     <EditText
         android:id="@+id/entryLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
-        />
+        android:inputType="text"/>
 </LinearLayout>
