@@ -5,9 +5,14 @@ import java.math.BigDecimal
 /**
  *
  */
+// TODO: make this parcelable.
 class Stack {
-    // TODO: see if there's a native Kotlin collection that we want to consider using.
-    private var entries: java.util.Stack<StackItem> = java.util.Stack()
+    // TODO: make this work.
+    //private var entries: List<StackItem> = List()
+
+    fun push(item: StackItem) {
+        // TODO: implement.
+    }
 }
 
 class StackItem(var value: BigDecimal) {

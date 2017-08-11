@@ -16,7 +16,12 @@ class CalculatorActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calculator)
 
-        stackView = getSupportFragmentManager().findFragmentById(R.id.stackView) as StackViewFragment
+        val fragManager = getSupportFragmentManager()
+        stackView = fragManager.findFragmentById(R.id.stackView) as StackViewFragment
+        val keyboardView = KeyboardFragment.newInstance("test")
+        val transaction = fragManager.beginTransaction()
+        transaction.replace(R.id.keyboard_placeholder, keyboardView)
+        transaction.commit()
     }
 
     override fun onKeyEvent(event: KeyEvent) {

@@ -14,9 +14,8 @@
         android:layout_weight="1"
         android:layout_height="0dp"/>
 
-    <fragment
-        android:id="@+id/keyboard"
-        class="com.example.blm768.stackhappy.ui.KeyboardFragment"
+    <FrameLayout
+        android:id="@+id/keyboard_placeholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

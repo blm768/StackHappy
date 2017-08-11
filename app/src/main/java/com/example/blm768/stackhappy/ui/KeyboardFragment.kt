@@ -17,16 +17,16 @@ import com.example.blm768.stackhappy.R
  */
 class KeyboardFragment : Fragment() {
 
-    // TODO: Rename and change types of parameters
     // TODO: settle on a naming convention for private instance variables.
-    private var mParam1: String? = null
+    private var keyLayout: KeyboardLayout? = null
 
     private var mListener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            mParam1 = arguments.getString(ARG_PARAM1)
+            val keyLayoutYAML = arguments.getString(ARG_LAYOUT)
+            keyLayout = KeyboardLayout.fromYAML(keyLayoutYAML)
         }
     }
 
@@ -71,26 +71,33 @@ class KeyboardFragment : Fragment() {
     }
 
     companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-        private val ARG_PARAM1 = "param1"
+        private val ARG_LAYOUT = "layout"
 
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
 
-         * @param param1 Parameter 1.
+         * @param layout A YAML string defining the layout
          * *
-         * @return A new instance of fragment KeyboardFragment.
+         * @return A new KeyboardFragment
          */
-        // TODO: Rename and change types and number of parameters
-        // TODO: build keyboard dynamically from an XML or JSON description.
-        fun newInstance(param1: String): KeyboardFragment {
+        fun newInstance(layout: String): KeyboardFragment {
             val fragment = KeyboardFragment()
             val args = Bundle()
-            args.putString(ARG_PARAM1, param1)
+            args.putString(ARG_LAYOUT, layout)
             fragment.arguments = args
             return fragment
         }
     }
-}// Required empty public constructor
+}
+
+// TODO: finish implementation.
+class KeyboardLayout {
+    //private val columnCount: Int
+
+    companion object {
+        fun fromYAML(yaml: String): KeyboardLayout {
+            return KeyboardLayout()
+        }
+    }
+}
