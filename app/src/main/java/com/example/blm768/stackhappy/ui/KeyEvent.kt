@@ -14,11 +14,9 @@ abstract class KeyEvent {
     }
 }
 
-class NumberKeyEvent: KeyEvent() {
-    private lateinit var digit: String
-
+class TextKeyEvent(val text: String): KeyEvent() {
     override fun act(listener: Listener) {
-        listener.enterText(digit)
+        listener.enterText(text)
     }
 }
 

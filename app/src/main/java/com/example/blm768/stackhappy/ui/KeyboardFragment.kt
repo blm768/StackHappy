@@ -6,7 +6,10 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.GridLayout
 import com.example.blm768.stackhappy.R
+import org.json.JSONObject
 
 
 /**
@@ -18,22 +21,33 @@ import com.example.blm768.stackhappy.R
 class KeyboardFragment : Fragment() {
 
     // TODO: settle on a naming convention for private instance variables.
-    private var keyLayout: KeyboardLayout? = null
+    private var keyboardLayout: KeyboardLayout? = null
 
     private var mListener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            val keyLayoutYAML = arguments.getString(ARG_LAYOUT)
-            keyLayout = KeyboardLayout.fromYAML(keyLayoutYAML)
+            val keyLayoutJSON = arguments.getString(ARG_LAYOUT)
+            keyboardLayout = KeyboardLayout.fromJSON(keyLayoutJSON)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_keyboard, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_keyboard, container, false) as GridLayout
+        val keyLayout = keyboardLayout
+        if(keyLayout != null) {
+            view.columnCount = keyLayout.columnCount
+            for(key in keyLayout.keys) {
+                val button = Button(context)
+                button.text = key.label
+                button.setOnClickListener { onKeyEvent(key.event) }
+                view.addView(button)
+            }
+        }
+        return view
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -91,13 +105,30 @@ class KeyboardFragment : Fragment() {
     }
 }
 
-// TODO: finish implementation.
-class KeyboardLayout {
-    //private val columnCount: Int
+class KeyboardLayout(val columnCount: Int, val keys: List<KeySpec>) {
 
     companion object {
-        fun fromYAML(yaml: String): KeyboardLayout {
-            return KeyboardLayout()
+        // TODO: handle exceptions better?
+        fun fromJSON(jsonText: String): KeyboardLayout {
+            val json = JSONObject(jsonText)
+            // TODO: validate range?
+            val columnCount = json.getInt("columns")
+            val keysArray = json.getJSONArray("keys")
+            val keys = (0 until keysArray.length()).map { i ->
+                // TODO: handle nulls properly.
+                val specObject = keysArray.getJSONObject(i)
+                val label = specObject.getString("label")
+                val type = specObject.getString("type")
+                val event = when(type) {
+                    "text" -> TextKeyEvent(specObject.getString("text"))
+                    // TODO: improve error message?
+                    else -> { throw IllegalArgumentException("Invalid key type")}
+                }
+                KeySpec(label, event)
+            }
+            return KeyboardLayout(columnCount, keys)
         }
     }
 }
+
+data class KeySpec(val label: String, val event: KeyEvent)

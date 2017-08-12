@@ -1,0 +1,8 @@
+{
+  "columns": 3,
+  "keys": [
+    {"label": "7", "type": "text", "text": "7"},
+    {"label": "8", "type": "text", "text": "8"},
+    {"label": "9", "type": "text", "text": "9"}
+  ]
+}

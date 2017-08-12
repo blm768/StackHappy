@@ -84,8 +84,7 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
      * to the activity and potentially other fragments contained in that
      * activity.
      */
-    interface OnFragmentInteractionListener {
-    }
+    interface OnFragmentInteractionListener
 
     companion object {
         // TODO: Rename parameter arguments, choose names that match

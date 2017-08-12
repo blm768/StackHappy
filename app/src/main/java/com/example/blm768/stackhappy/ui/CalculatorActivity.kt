@@ -4,6 +4,7 @@ import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.blm768.stackhappy.R
+import com.example.blm768.stackhappy.util.readRawResource
 
 class CalculatorActivity : AppCompatActivity(),
         StackViewFragment.OnFragmentInteractionListener,
@@ -16,9 +17,14 @@ class CalculatorActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calculator)
 
-        val fragManager = getSupportFragmentManager()
+        // Load keyboard layout.
+        // TODO: make this configurable?
+        val keyboardLayout = readRawResource(resources, R.raw.keyboard_layout)
+
+        // Create and insert the keyboard fragment.
+        val fragManager = supportFragmentManager
         stackView = fragManager.findFragmentById(R.id.stackView) as StackViewFragment
-        val keyboardView = KeyboardFragment.newInstance("test")
+        val keyboardView = KeyboardFragment.newInstance(keyboardLayout)
         val transaction = fragManager.beginTransaction()
         transaction.replace(R.id.keyboard_placeholder, keyboardView)
         transaction.commit()
