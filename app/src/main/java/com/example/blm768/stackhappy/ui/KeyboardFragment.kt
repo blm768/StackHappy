@@ -20,10 +20,8 @@ import org.json.JSONObject
  */
 class KeyboardFragment : Fragment() {
 
-    // TODO: settle on a naming convention for private instance variables.
     private var keyboardLayout: KeyboardLayout? = null
-
-    private var mListener: OnFragmentInteractionListener? = null
+    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,27 +38,30 @@ class KeyboardFragment : Fragment() {
         val keyLayout = keyboardLayout
         if(keyLayout != null) {
             view.columnCount = keyLayout.columnCount
+
+            // TODO: support spanning.
+            val columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
             for(key in keyLayout.keys) {
                 val button = Button(context)
                 button.text = key.label
                 button.setOnClickListener { onKeyEvent(key.event) }
                 view.addView(button)
+                (button.getLayoutParams() as GridLayout.LayoutParams).columnSpec = columnSpec
             }
         }
         return view
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     fun onKeyEvent(event: KeyEvent) {
-        if (mListener != null) {
-            mListener!!.onKeyEvent(event)
+        if (listener != null) {
+            listener!!.onKeyEvent(event)
         }
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
-            mListener = context
+            listener = context
         } else {
             throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
         }
@@ -68,7 +69,7 @@ class KeyboardFragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
-        mListener = null
+        listener = null
     }
 
     /**
@@ -121,6 +122,7 @@ class KeyboardLayout(val columnCount: Int, val keys: List<KeySpec>) {
                 val type = specObject.getString("type")
                 val event = when(type) {
                     "text" -> TextKeyEvent(specObject.getString("text"))
+                    "push" -> PushKeyEvent()
                     // TODO: improve error message?
                     else -> { throw IllegalArgumentException("Invalid key type")}
                 }

@@ -10,17 +10,24 @@ abstract class KeyEvent {
 
     interface Listener {
         fun enterText(text: String)
+        fun push()
         fun doOperation(operation: (Stack) -> Unit)
     }
 }
 
-class TextKeyEvent(val text: String): KeyEvent() {
+class TextKeyEvent(val text: String) : KeyEvent() {
     override fun act(listener: Listener) {
         listener.enterText(text)
     }
 }
 
-class OperationEvent(val operation: (Stack) -> Unit) : KeyEvent() {
+class PushKeyEvent : KeyEvent() {
+    override fun act(listener: Listener) {
+        listener.push()
+    }
+}
+
+class OperationKeyEvent(val operation: (Stack) -> Unit) : KeyEvent() {
     override fun act(listener: Listener) {
         listener.doOperation(operation)
     }
