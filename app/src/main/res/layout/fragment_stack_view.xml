@@ -5,8 +5,8 @@
               android:orientation="vertical"
               tools:context="com.example.blm768.stackhappy.ui.StackViewFragment">
 
-    <LinearLayout
-        android:id="@+id/stackEntries"
+    <ListView
+        android:id="@+id/stackItems"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"/>

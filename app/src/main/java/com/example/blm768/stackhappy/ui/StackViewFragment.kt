@@ -6,8 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import com.example.blm768.stackhappy.InvalidStackItemException
 import com.example.blm768.stackhappy.R
 import com.example.blm768.stackhappy.Stack
@@ -27,6 +26,7 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
 
     private var mListener: OnFragmentInteractionListener? = null
     private var entryLine: EditText? = null
+    private var stackAdapter: StackItemAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +42,11 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
         val view = inflater!!.inflate(R.layout.fragment_stack_view, container, false)
 
         entryLine = view.findViewById(R.id.entryLine) as EditText
+
+        val stackItems = view.findViewById(R.id.stackItems) as ListView
+        // TODO: handle the second parameter properly.
+        stackAdapter = StackItemAdapter(context, 0, stack)
+        stackItems.adapter = stackAdapter
 
         return view
     }
@@ -75,15 +80,26 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
         entryLine?.append(text)
     }
 
-    override fun push() {
-        val text = entryLine?.text?.toString()
+    override fun pushOrDuplicate() {
         // TODO: duplicate existing value if the stack isn't empty.
-        // TODO: make a toast if there's nothing to duplicate?
-        if (text == null || text.isEmpty()) return
+        push()
+    }
+
+    fun push() {
+        val text = entryLine?.text?.toString()
+
+        if (text == null || text.isEmpty()) {
+            Toast.makeText(context, "Nothing to push", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         try {
             val item = StackItem.fromString(text)
             stack.push(item)
-            // TODO: update display.
+            entryLine?.text?.clear()
+            // TODO: break out into a method?
+            // (may need additional calls; see https://stackoverflow.com/questions/2250770/how-to-refresh-android-listview)
+            stackAdapter?.notifyDataSetChanged()
         } catch(ex: InvalidStackItemException) {
             // TODO: improve message.
             Toast.makeText(context, "Invalid syntax", Toast.LENGTH_SHORT).show()
@@ -126,3 +142,17 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
 }
 
 class StackView
+
+class StackItemAdapter(context: Context, resourceID: Int, stack: Stack) : ArrayAdapter<StackItem>(context, resourceID, stack.items) {
+
+    override fun getView(index: Int, convertView: View?, parent: ViewGroup): View {
+        val item = getItem(index)
+        val recycled = convertView as? TextView
+        val view: TextView = if (recycled != null) recycled else TextView(context)
+
+        view.text = item.text()
+        // TODO: set text size and alignment.
+        return view
+    }
+}
+

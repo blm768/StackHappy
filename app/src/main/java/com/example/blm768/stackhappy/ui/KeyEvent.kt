@@ -10,7 +10,7 @@ abstract class KeyEvent {
 
     interface Listener {
         fun enterText(text: String)
-        fun push()
+        fun pushOrDuplicate()
         fun doOperation(operation: (Stack) -> Unit)
     }
 }
@@ -23,7 +23,7 @@ class TextKeyEvent(val text: String) : KeyEvent() {
 
 class PushKeyEvent : KeyEvent() {
     override fun act(listener: Listener) {
-        listener.push()
+        listener.pushOrDuplicate()
     }
 }
 

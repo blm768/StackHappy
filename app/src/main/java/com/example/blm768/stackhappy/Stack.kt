@@ -7,10 +7,10 @@ import java.math.BigDecimal
  */
 // TODO: make this parcelable.
 class Stack {
-    private var entries: MutableList<StackItem> = mutableListOf()
+    val items: MutableList<StackItem> = mutableListOf()
 
     fun push(item: StackItem) {
-        entries.add(item)
+        items.add(item)
     }
 }
 
@@ -25,13 +25,16 @@ class StackItem(var value: BigDecimal) {
             try {
                 return StackItem(BigDecimal(str))
             } catch(ex: NumberFormatException) {
-                throw InvalidStackItemException()
+                throw InvalidStackItemException(ex)
             }
         }
     }
 }
 
-class InvalidStackItemException : Exception() {}
+class InvalidStackItemException : Exception {
+    constructor(ex: Exception) : super(ex) {}
+    constructor() : super() {}
+}
 
 fun add(a: StackItem, b: StackItem): StackItem? {
     return StackItem(a.value + b.value)
