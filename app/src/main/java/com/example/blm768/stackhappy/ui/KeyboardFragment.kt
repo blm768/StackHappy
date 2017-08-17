@@ -46,7 +46,7 @@ class KeyboardFragment : Fragment() {
                 button.text = key.label
                 button.setOnClickListener { onKeyEvent(key.event) }
                 view.addView(button)
-                (button.getLayoutParams() as GridLayout.LayoutParams).columnSpec = columnSpec
+                (button.layoutParams as GridLayout.LayoutParams).columnSpec = columnSpec
             }
         }
         return view
@@ -92,7 +92,7 @@ class KeyboardFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
 
-         * @param layout A YAML string defining the layout
+         * @param layout A JSON string defining the layout
          * *
          * @return A new KeyboardFragment
          */

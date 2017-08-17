@@ -11,10 +11,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"/>
 
+    <!-- TODO: figure out how to use a dimension here. -->
     <EditText
         android:id="@+id/entryLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:textSize="20sp"
         android:inputType="text"/>
 </LinearLayout>

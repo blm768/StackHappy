@@ -32,8 +32,8 @@ class StackItem(var value: BigDecimal) {
 }
 
 class InvalidStackItemException : Exception {
-    constructor(ex: Exception) : super(ex) {}
-    constructor() : super() {}
+    constructor(ex: Exception) : super(ex)
+    constructor() : super()
 }
 
 fun add(a: StackItem, b: StackItem): StackItem? {

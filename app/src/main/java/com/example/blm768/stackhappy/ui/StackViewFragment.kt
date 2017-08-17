@@ -41,9 +41,9 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_stack_view, container, false)
 
-        entryLine = view.findViewById(R.id.entryLine) as EditText
+        entryLine = view.findViewById<EditText>(R.id.entryLine)
 
-        val stackItems = view.findViewById(R.id.stackItems) as ListView
+        val stackItems = view.findViewById<ListView>(R.id.stackItems)
         // TODO: handle the second parameter properly.
         stackAdapter = StackItemAdapter(context, 0, stack)
         stackItems.adapter = stackAdapter
@@ -141,14 +141,11 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
     }
 }
 
-class StackView
-
 class StackItemAdapter(context: Context, resourceID: Int, stack: Stack) : ArrayAdapter<StackItem>(context, resourceID, stack.items) {
 
     override fun getView(index: Int, convertView: View?, parent: ViewGroup): View {
         val item = getItem(index)
-        val recycled = convertView as? TextView
-        val view: TextView = if (recycled != null) recycled else TextView(context)
+        val view: TextView = convertView as? TextView ?: TextView(context)
 
         view.text = item.text()
         // TODO: set text size and alignment.
