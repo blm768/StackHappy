@@ -3,14 +3,12 @@ package com.example.blm768.stackhappy.ui
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.example.blm768.stackhappy.InvalidStackItemException
-import com.example.blm768.stackhappy.R
-import com.example.blm768.stackhappy.Stack
-import com.example.blm768.stackhappy.StackItem
+import com.example.blm768.stackhappy.*
 
 /**
  * A simple [Fragment] subclass.
@@ -24,7 +22,7 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
 
     private var stack: Stack = Stack()
 
-    private var mListener: OnFragmentInteractionListener? = null
+    private var listener: OnFragmentInteractionListener? = null
     private var entryLine: EditText? = null
     private var stackAdapter: StackItemAdapter? = null
 
@@ -41,7 +39,7 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_stack_view, container, false)
 
-        entryLine = view.findViewById<EditText>(R.id.entryLine)
+        entryLine = view.findViewById(R.id.entryLine)
 
         val stackItems = view.findViewById<ListView>(R.id.stackItems)
         // TODO: handle the second parameter properly.
@@ -51,20 +49,16 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
         return view
     }
 
-    fun onKeyEvent(event: KeyEvent) {
-        event.act(this)
-    }
-
     // TODO: rename and implement.
     fun onSomeEvent() {
-        if (mListener != null) {
+        if (listener != null) {
         }
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
-            mListener = context
+            listener = context
         } else {
             throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
         }
@@ -72,7 +66,7 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
 
     override fun onDetach() {
         super.onDetach()
-        mListener = null
+        listener = null
     }
 
     override fun enterText(text: String) {
@@ -80,36 +74,67 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
         entryLine?.append(text)
     }
 
+    // TODO: rename.
     override fun pushOrDuplicate() {
-        // TODO: duplicate existing value if the stack isn't empty.
-        push()
-    }
-
-    fun push() {
-        val text = entryLine?.text?.toString()
-
-        if (text == null || text.isEmpty()) {
+        if (entryLine == null || entryLine!!.text.isEmpty()) {
             Toast.makeText(context, "Nothing to push", Toast.LENGTH_SHORT).show()
             return
         }
 
+        // TODO: duplicate existing value if the stack isn't empty.
         try {
-            val item = StackItem.fromString(text)
-            stack.push(item)
-            entryLine?.text?.clear()
-            // TODO: break out into a method?
-            // (may need additional calls; see https://stackoverflow.com/questions/2250770/how-to-refresh-android-listview)
-            stackAdapter?.notifyDataSetChanged()
-        } catch(ex: InvalidStackItemException) {
-            // TODO: improve message.
-            Toast.makeText(context, "Invalid syntax", Toast.LENGTH_SHORT).show()
+            tryPush()
+        } catch (ex: InvalidStackItemException) {
+            reportSyntaxError()
         }
     }
 
     override fun doOperation(operation: (Stack) -> Unit) {
         // TODO: implement fully. (Push entry line before operating.)
-        operation(stack)
+        val text = entryLine?.text?.toString()
+
+        if (text != null && !text.isEmpty()) {
+            try {
+                tryPush()
+            } catch (ex: InvalidStackItemException) {
+                reportSyntaxError()
+                return
+            }
+        }
+
+        try {
+            operation(stack)
+        } catch (ex: StackUnderflowException) {
+            reportStackUnderflowError()
+        }
+
+        updateItemDisplay()
     }
+
+    private fun tryPush() {
+        val text = entryLine?.text?.toString()
+
+        if (text == null || text.isEmpty()) return
+
+        val item = StackItem.fromString(text)
+        stack.push(item)
+        entryLine?.text?.clear()
+        updateItemDisplay()
+    }
+
+    // TODO: make common reportError method?
+    private fun reportSyntaxError() {
+        // TODO: improve message.
+        Toast.makeText(context, "Invalid syntax", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun reportStackUnderflowError() {
+        Toast.makeText(context, "Not enough operands", Toast.LENGTH_SHORT).show()
+    }
+
+    // (may need additional calls; see https://stackoverflow.com/questions/2250770/how-to-refresh-android-listview)
+    // TODO: make sure this works in all (reasonable) cases.
+    private fun updateItemDisplay() = stackAdapter?.notifyDataSetChanged()
 
     /**
      * This interface must be implemented by activities that contain this
@@ -142,13 +167,15 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
 }
 
 class StackItemAdapter(context: Context, resourceID: Int, stack: Stack) : ArrayAdapter<StackItem>(context, resourceID, stack.items) {
-
     override fun getView(index: Int, convertView: View?, parent: ViewGroup): View {
         val item = getItem(index)
         val view: TextView = convertView as? TextView ?: TextView(context)
 
         view.text = item.text()
-        // TODO: set text size and alignment.
+        view.gravity = Gravity.RIGHT
+        view.textAlignment = View.TEXT_ALIGNMENT_GRAVITY
+        // TODO: load dimension resource.
+        view.textSize = context.resources.getDimension(R.dimen.stackEntryTextSize)
         return view
     }
 }

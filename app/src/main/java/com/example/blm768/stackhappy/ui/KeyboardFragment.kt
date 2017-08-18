@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.GridLayout
 import com.example.blm768.stackhappy.R
-import org.json.JSONObject
 
 
 /**
@@ -19,7 +18,6 @@ import org.json.JSONObject
  * create an instance of this fragment.
  */
 class KeyboardFragment : Fragment() {
-
     private var keyboardLayout: KeyboardLayout? = null
     private var listener: OnFragmentInteractionListener? = null
 
@@ -52,12 +50,6 @@ class KeyboardFragment : Fragment() {
         return view
     }
 
-    fun onKeyEvent(event: KeyEvent) {
-        if (listener != null) {
-            listener!!.onKeyEvent(event)
-        }
-    }
-
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
@@ -72,7 +64,14 @@ class KeyboardFragment : Fragment() {
         listener = null
     }
 
+    private fun onKeyEvent(event: KeyEvent) {
+        if (listener != null) {
+            listener!!.onKeyEvent(event)
+        }
+    }
+
     /**
+     *
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -105,32 +104,3 @@ class KeyboardFragment : Fragment() {
         }
     }
 }
-
-class KeyboardLayout(val columnCount: Int, val keys: List<KeySpec>) {
-
-    companion object {
-        // TODO: handle exceptions better?
-        fun fromJSON(jsonText: String): KeyboardLayout {
-            val json = JSONObject(jsonText)
-            // TODO: validate range?
-            val columnCount = json.getInt("columns")
-            val keysArray = json.getJSONArray("keys")
-            val keys = (0 until keysArray.length()).map { i ->
-                // TODO: handle nulls properly.
-                val specObject = keysArray.getJSONObject(i)
-                val label = specObject.getString("label")
-                val type = specObject.getString("type")
-                val event = when(type) {
-                    "text" -> TextKeyEvent(specObject.getString("text"))
-                    "push" -> PushKeyEvent()
-                    // TODO: improve error message?
-                    else -> { throw IllegalArgumentException("Invalid key type")}
-                }
-                KeySpec(label, event)
-            }
-            return KeyboardLayout(columnCount, keys)
-        }
-    }
-}
-
-data class KeySpec(val label: String, val event: KeyEvent)

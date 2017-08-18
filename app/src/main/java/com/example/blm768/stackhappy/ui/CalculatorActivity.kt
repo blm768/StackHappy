@@ -29,6 +29,6 @@ class CalculatorActivity : AppCompatActivity(),
     }
 
     override fun onKeyEvent(event: KeyEvent) {
-            stackView?.onKeyEvent(event)
+        if (stackView != null) event.act(stackView!!)
     }
 }

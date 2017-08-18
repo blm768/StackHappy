@@ -11,11 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"/>
 
-    <!-- TODO: figure out how to use a dimension here. -->
+    <!-- TODO: figure out how to actually change the text size. -->
     <EditText
         android:id="@+id/entryLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:gravity="right"
+        android:textAlignment="gravity"
+        android:textSize="@dimen/entryLineTextSize"/>
 </LinearLayout>

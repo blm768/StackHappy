@@ -27,7 +27,7 @@ class PushKeyEvent : KeyEvent() {
     }
 }
 
-class OperationKeyEvent(val operation: (Stack) -> Unit) : KeyEvent() {
+class OperationKeyEvent(private val operation: (Stack) -> Unit) : KeyEvent() {
     override fun act(listener: Listener) {
         listener.doOperation(operation)
     }

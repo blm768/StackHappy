@@ -1,5 +1,5 @@
 {
-  "columns": 3,
+  "columns": 4,
   "keys": [
     {"label": "7", "type": "text", "text": "7"},
     {"label": "8", "type": "text", "text": "8"},
@@ -7,6 +7,11 @@
       "label": "9",
       "type": "text",
       "text": "9"
+    },
+    {
+      "label": "/",
+      "type": "operation",
+      "op": "divide"
     },
     {
       "label": "4",
@@ -24,6 +29,11 @@
       "text": "6"
     },
     {
+      "label": "*",
+      "type": "operation",
+      "op": "multiply"
+    },
+    {
       "label": "1",
       "type": "text",
       "text": "1"
@@ -39,6 +49,11 @@
       "text": "3"
     },
     {
+      "label": "-",
+      "type": "operation",
+      "op": "subtract"
+    },
+    {
       "label": "0",
       "type": "text",
       "text": "0"
@@ -51,6 +66,11 @@
     {
       "label": "⏎",
       "type": "push"
+    },
+    {
+      "label": "+",
+      "type": "operation",
+      "op": "add"
     }
   ]
 }
