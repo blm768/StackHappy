@@ -23,10 +23,7 @@ class StackItem(var value: BigDecimal) {
     companion object {
         fun fromString(str: String): StackItem {
             try {
-                val value = BigDecimal(str)
-                // TODO: figure out how to actually make this work like I want it to.
-                value.setScale(STACK_VALUE_SCALE, STACK_VALUE_ROUNDING)
-                return StackItem(value)
+                return StackItem(BigDecimal(str))
             } catch(ex: NumberFormatException) {
                 throw InvalidStackItemException(ex)
             }
@@ -63,7 +60,8 @@ fun multiply(a: StackItem, b: StackItem): StackItem {
 }
 
 fun divide(a: StackItem, b: StackItem): StackItem {
-    return StackItem(a.value / b.value)
+    // TODO: handle scale more intelligently.
+    return StackItem(a.value.divide(b.value, STACK_VALUE_SCALE, STACK_VALUE_ROUNDING))
 }
 
 // TODO: change case?

@@ -64,11 +64,7 @@ class KeyboardFragment : Fragment() {
         listener = null
     }
 
-    private fun onKeyEvent(event: KeyEvent) {
-        if (listener != null) {
-            listener!!.onKeyEvent(event)
-        }
-    }
+    private fun onKeyEvent(event: KeyEvent) = listener?.onKeyEvent(event)
 
     /**
      *

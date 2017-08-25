@@ -11,20 +11,22 @@ import android.widget.*
 import com.example.blm768.stackhappy.*
 
 /**
- * A simple [Fragment] subclass.
+ * A fragment that displays stack elements and an entry line
+ *
  * Activities that contain this fragment must implement the
  * [StackViewFragment.OnFragmentInteractionListener] interface
  * to handle interaction events.
+ *
  * Use the [StackViewFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class StackViewFragment : Fragment(), KeyEvent.Listener {
-
     private var stack: Stack = Stack()
 
     private var listener: OnFragmentInteractionListener? = null
     private var entryLine: EditText? = null
     private var stackAdapter: StackItemAdapter? = null
+    private var stackView: ListView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +43,9 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
 
         entryLine = view.findViewById(R.id.entryLine)
 
-        val stackItems = view.findViewById<ListView>(R.id.stackItems)
-        // TODO: handle the second parameter properly.
-        stackAdapter = StackItemAdapter(context, 0, stack)
-        stackItems.adapter = stackAdapter
+        stackView = view.findViewById(R.id.stackItems)
+        stackAdapter = StackItemAdapter(context, stack)
+        stackView!!.adapter = stackAdapter
 
         return view
     }
@@ -90,7 +91,6 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
     }
 
     override fun doOperation(operation: (Stack) -> Unit) {
-        // TODO: implement fully. (Push entry line before operating.)
         val text = entryLine?.text?.toString()
 
         if (text != null && !text.isEmpty()) {
@@ -132,9 +132,10 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
         Toast.makeText(context, "Not enough operands", Toast.LENGTH_SHORT).show()
     }
 
-    // (may need additional calls; see https://stackoverflow.com/questions/2250770/how-to-refresh-android-listview)
-    // TODO: make sure this works in all (reasonable) cases.
-    private fun updateItemDisplay() = stackAdapter?.notifyDataSetChanged()
+    private fun updateItemDisplay() {
+        stackAdapter?.notifyDataSetChanged()
+        stackView?.invalidateViews()
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -166,7 +167,7 @@ class StackViewFragment : Fragment(), KeyEvent.Listener {
     }
 }
 
-class StackItemAdapter(context: Context, resourceID: Int, stack: Stack) : ArrayAdapter<StackItem>(context, resourceID, stack.items) {
+class StackItemAdapter(context: Context, stack: Stack) : ArrayAdapter<StackItem>(context, 0, stack.items) {
     override fun getView(index: Int, convertView: View?, parent: ViewGroup): View {
         val item = getItem(index)
         val view: TextView = convertView as? TextView ?: TextView(context)
